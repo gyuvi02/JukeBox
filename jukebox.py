@@ -74,3 +74,41 @@ class DataListBox(Scrollbox):
             link_id = self.cursor.execute(self.sql_select + " WHERE " + self.field + "=?", value).fetchone()[1]
             self.linked_box.requery(link_id)
 
+if __name__ == '__main__':
+    conn = sqlite3.connect('music.sqlite')
+
+    mainWindow = tkinter.Tk()
+    mainWindow.title('Music DB Browser')
+    mainWindow.geometry('1024x768')
+
+    mainWindow.columnconfigure(0, weight=2)
+    mainWindow.columnconfigure(1, weight=2)
+    mainWindow.columnconfigure(2, weight=2)
+    mainWindow.columnconfigure(3, weight=1)    # spacer column on right
+
+    mainWindow.rowconfigure(0, weight=1)
+    mainWindow.rowconfigure(1, weight=5)
+    mainWindow.rowconfigure(2, weight=5)
+    mainWindow.rowconfigure(3, weight=1)
+
+    # ===== labels =====
+    tkinter.Label(mainWindow, text="Artists").grid(row=0, column=0)
+    tkinter.Label(mainWindow, text="Albums").grid(row=0, column=1)
+    tkinter.Label(mainWindow, text="Songs").grid(row=0, column=2)
+
+    # ===== Artists Listbox =====
+    artistList = DataListBox(mainWindow, conn, "artists", "name")
+    artistList.grid(row=1, column=0, sticky='nsew', rowspan=2, padx=(30, 0))
+    artistList.config(border=2, relief='sunken')
+
+    artistList.requery()
+
+    # ===== Albums Listbox =====
+    albumLV = tkinter.Variable(mainWindow)
+    albumLV.set(("Choose an artist",))
+    albumList = DataListBox(mainWindow, conn, "albums", "name", sort_order=("name",))
+    # albumList.requery(12)
+    albumList.grid(row=1, column=1, sticky='nsew', padx=(30, 0))
+    albumList.config(border=2, relief='sunken')
+
+
