@@ -111,4 +111,23 @@ if __name__ == '__main__':
     albumList.grid(row=1, column=1, sticky='nsew', padx=(30, 0))
     albumList.config(border=2, relief='sunken')
 
+ # albumList.bind('<<ListboxSelect>>', get_songs)
+    artistList.link(albumList, "artist")
+
+    # ===== Songs Listbox =====
+    songLV = tkinter.Variable(mainWindow)
+    songLV.set(("Choose an album",))
+    songList = DataListBox(mainWindow, conn, "songs", "title", ("track", "title"))
+    # songList.requery()
+    songList.grid(row=1, column=2, sticky='nsew', padx=(30, 0))
+    songList.config(border=2, relief='sunken')
+
+    albumList.link(songList, "album")
+
+    # ===== Main loop =====
+    # testList = range(0, 100)
+    # albumLV.set(tuple(testList))
+    mainWindow.mainloop()
+    print("closing database connection")
+    conn.close()
 
